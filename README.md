@@ -1,44 +1,85 @@
 # Train Delay Data Engineering Pipeline
 
-An end-to-end data engineering project that collects public commuter-rail data, preserves raw API responses, validates and transforms records, and produces analytical datasets.
+A data engineering project that collects commuter-rail prediction data, preserves raw API responses, validates incoming records, and prepares the foundation for downstream analytics.
 
-## Project objectives
+## Current Features
 
-- Ingest schedule and prediction data from a public API.
-- Preserve timestamped raw data for reproducibility.
-- Build reliable data cleaning and validation workflows.
-- Store raw and processed datasets in Amazon S3.
-- Use PySpark for scalable transformations.
-- Orchestrate the pipeline with Apache Airflow.
-- Produce SQL-based train performance analytics.
+- Fetches train prediction data from the MBTA V3 API.
+- Retries requests after selected network and server failures.
+- Validates the structure of API responses.
+- Saves timestamped JSON snapshots with ingestion metadata.
+- Logs ingestion progress and failures.
+- Includes automated tests for validation and API client behavior.
 
-## Technology stack
+## Technology Stack
 
 - Python
 - REST APIs and JSON
-- SQL and PostgreSQL
-- Amazon S3
-- PySpark
-- Apache Airflow
+- Requests
+- pytest
 - Git and GitHub
 
-## Current status
+## Project Structure
 
-Stage 1: API connectivity and raw data ingestion.
+```text
+scripts/
+    run_ingestion.py
 
-Later stages will be documented as their implementations and tests are completed.
+src/
+    api_client.py
+    ingestion.py
+    validation.py
 
-## Data source
+tests/
+    test_api_client.py
+    test_validation.py
 
-MBTA V3 API: https://www.mbta.com/developers/v3-api
+data/
+    raw/
+```
 
-This project is intended for learning and portfolio demonstration. Predictions are not assumed to represent actual arrival times.
+## Setup
 
-## Run locally
-
-Create and activate a Python virtual environment, install the dependencies, and run:
+Create a virtual environment and install dependencies:
 
 ```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
 python -m pip install -r requirements.txt
-python scripts/check_data_source.py
 ```
+
+Run the ingestion pipeline:
+
+```powershell
+python scripts/run_ingestion.py
+```
+
+Run the tests:
+
+```powershell
+python -m pytest -v
+```
+
+## Data Source
+
+The project currently uses the MBTA V3 API to inspect commuter-rail predictions.
+
+API documentation: https://www.mbta.com/developers/v3-api
+
+Prediction data is not assumed to represent actual train arrival times.
+
+## Planned Development
+
+- Data cleaning and quality checks
+- SQL data modelling and analytical queries
+- Amazon S3 storage
+- PySpark transformations
+- Apache Airflow orchestration
+- Monitoring and pipeline recovery
+- Additional Hadoop ecosystem exercises
+
+Features will be marked complete after implementation and testing.
+
+## Limitations
+
+The current version is an initial ingestion pipeline. It does not yet provide a production deployment, a historical actual-arrival dataset, or a verified train-delay prediction model.
